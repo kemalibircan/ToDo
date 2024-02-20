@@ -114,6 +114,7 @@ marginLeft:10
     fontWeight:'500'
   },
   flatList:{
+    flex:1,
     marginTop:15,
     marginLeft:25,
     
