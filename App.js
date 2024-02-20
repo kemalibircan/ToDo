@@ -1,9 +1,11 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { Provider, useDispatch } from 'react-redux'
+import React, { useState } from 'react'
+import { Provider, useDispatch, useSelector } from 'react-redux'
 import { store } from './store'
 import { toggleListModalVisible } from './src/slices/modalSlice'
 import ListModal from './src/modals/ListModal'
+import { setUserId, setUsername } from './src/slices/userProfileSlice'
+import { selectTaskCounter, setTaskCounter } from './src/slices/taskSlice'
 
 
 const AppWrapper = () => {
@@ -16,6 +18,37 @@ const AppWrapper = () => {
 
 const App = () => {
   const dispatch = useDispatch()
+  const [userName,setUserName] = useState()
+
+  const taskCounter = useSelector(selectTaskCounter)
+  const handleInputChange = (inputText) => {
+    setUserName(inputText);
+  };
+
+  const handleData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/users', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: userName,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      dispatch(setUsername(data.message[0].username))
+      dispatch(setUserId(data.message[0].id))
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Kullanıcıya hata mesajı gösterilebilir
+    }
+  };
+  
+
 
   return (
    <SafeAreaView style={styles.container}>
@@ -26,9 +59,13 @@ const App = () => {
     </View>
     <View style={styles.bottomContainer}>
   <View style={styles.inputPlaceContainer}>
-<TextInput placeholderTextColor={'white'} placeholder='Kullanıcı Adınız' style={styles.userNameInput}></TextInput>
+<TextInput onChangeText={handleInputChange} value={userName} placeholderTextColor={'white'} placeholder='Kullanıcı Adınız' style={styles.userNameInput}></TextInput>
 <TouchableOpacity 
-onPress={ () => dispatch(toggleListModalVisible(true)) }
+onPress={ () => {
+  handleData()
+  dispatch(toggleListModalVisible(true))
+  dispatch(setTaskCounter(taskCounter+1))
+}}
 style={styles.button}>
   <Text style={styles.buttonText}>Giriş Yap</Text>
 </TouchableOpacity>
@@ -110,7 +147,6 @@ marginTop:30
     flex:1,
   alignItems:'center',
 justifyContent:'space-around',
-marginBottom:20
   },
   textWibesoft:{
     fontSize:16,

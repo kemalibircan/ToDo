@@ -1,17 +1,78 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Modal from 'react-native-modal'
-import { selectDetailModalVisible, selectListModalVisible, toggleDetailModalVisible  } from '../slices/modalSlice';
+import { selectDetailModalVisible, selectListModalVisible, selectNewTaskModal, toggleDetailModalVisible, toggleNewTaskModalVisible  } from '../slices/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import ModalItem from '../items/ModalItem';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { selectUsername } from '../slices/userProfileSlice';
+import { selectTaskCounter, selectTaskId, selectTaskName, setTaskCounter } from '../slices/taskSlice';
+import NewTaskModal from './NewTaskModal';
 
 const DetailModal = () => {
+  const [taskData,setTaskData] = useState([])
+  const taskId = useSelector(selectTaskId)
+  const selectVisibilty = useSelector(selectNewTaskModal)
+  const taskCounter = useSelector(selectTaskCounter)
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:3001/api/v1/task/get', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "list_id": taskId,
+        }),
+      });
 
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setTaskData(data.message);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      // Kullanıcıya hata mesajı gösterebilirsiniz
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+     
+      await fetch('http://localhost:3001/api/v1/list/delete', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          "list_id": taskId,
+        })
+        ,
+      }).then(data => data.json()).then(data => console.log(data.message));
+      dispatch(setTaskCounter(taskCounter+1))
+      dispatch(toggleDetailModalVisible(false))
+
+    } catch (error) {
+      console.error('Error deleting list:', error);
+      // Hata durumunda kullanıcıya bilgilendirme yap
+    }
+  };
+
+  useEffect(() => {
+
+    fetchData()
+
+  },[])
+  useEffect(() => {
+
+    fetchData()
+
+  },[selectVisibilty,taskCounter])
   const selectModalVisible = useSelector(selectDetailModalVisible);
-
   const dispatch = useDispatch()
+  const taskName = useSelector(selectTaskName)
   const DetailModalItem = ({item}) => {
 
     return(
@@ -31,6 +92,7 @@ const DetailModal = () => {
     animationOutTiming={500}
     backdropOpacity={1}
     backdropColor={'white'}>
+      <NewTaskModal></NewTaskModal>
       <View style={styles.container}>
     <View style={styles.header}>
       <View style={styles.headerLeftContainer}>
@@ -38,17 +100,25 @@ const DetailModal = () => {
       <TouchableOpacity style={styles.backButton} onPress={() => dispatch(toggleDetailModalVisible(false))}>
       <Ionicons name="arrow-back-outline" color={'white'} size={30}></Ionicons>
       </TouchableOpacity>
-      <Text style={styles.name}>Ali</Text>
+      <Text style={styles.name}>{taskName}</Text>
       </View>
-      <TouchableOpacity style={styles.trashButton}>
+      <TouchableOpacity 
+      onPress={() => {
+        handleDelete()
+      }}
+      style={styles.trashButton}>
     <Ionicons name="trash" color={'white'} size={30}></Ionicons>
     </TouchableOpacity>
     </View>
     <FlatList
-    data={[{},{}]}
+    data={taskData}
     renderItem={DetailModalItem}
     />
-    <TouchableOpacity style={styles.stickyButton}>
+    <TouchableOpacity 
+    onPress={() => {
+      dispatch(toggleNewTaskModalVisible(true))
+    }}
+    style={styles.stickyButton}>
     <Ionicons name="add-outline" color={'blue'} size={40}></Ionicons>
 
     </TouchableOpacity>

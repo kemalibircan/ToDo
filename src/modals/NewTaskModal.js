@@ -1,22 +1,17 @@
 import { FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useEffect,useState } from 'react'
 import Modal from 'react-native-modal'
-import { selectDetailModalVisible, selectListModalVisible, selectNewListModalVisible, toggleDetailModalVisible, toggleNewListModalVisible  } from '../slices/modalSlice';
+import { selectDetailModalVisible, selectListModalVisible, selectNewListModalVisible, selectNewTaskModal, toggleDetailModalVisible, toggleNewListModalVisible, toggleNewTaskModalVisible  } from '../slices/modalSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
-import ModalItem from '../items/ModalItem';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DetailModal from './DetailModal';
-import { selectUserId } from '../slices/userProfileSlice';
-const NewListModal = () => {
-               const selectModalVisible = useSelector(selectNewListModalVisible);
 
+import { selectUserId } from '../slices/userProfileSlice';
+import { selectTaskId } from '../slices/taskSlice';
+const NewTaskModal = () => {
+               const selectModalVisible = useSelector(selectNewTaskModal);
                const [userId, setUserId] = useState('your_user_id');
   const [listName, setListName] = useState('');
-  const [listIcon, setListIcon] = useState('your_list_icon');
-  const [isLoading, setIsLoading] = useState(false); // For loading state
-  const [error, setError] = useState(null); // For error handling
   const selectId = useSelector(selectUserId)
+  const listId = useSelector(selectTaskId)
 
   const handleInputChange = (inputText) => {
     setListName(inputText);
@@ -25,20 +20,19 @@ const NewListModal = () => {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/v1/list', {
+      const response = await fetch('http://localhost:3001/api/v1/task/create', {
         method: 'POST',
         headers: {
-          // Include authentication headers if necessary
-          // 'Authorization': 'Bearer your_token',
+        
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           user_id: selectId,
-          list_name: listName,
+          list_id:listId,
+          content:listName
         }),
       });
     } catch (error) {
-      setError(error.message); // Set error message for UI display
       console.error('Error creating list:', error);
     } 
   };
@@ -60,11 +54,11 @@ const NewListModal = () => {
                backdropColor={'blue'}>
                <View style={styles.container}>
                               <View style={styles.middleContainer}>
-                              <TextInput onChangeText={handleInputChange} value={listName} placeholder='Liste başlığı girin.' style={styles.textInput}></TextInput>
+                              <TextInput onChangeText={handleInputChange} value={listName} placeholder='Görevinizi Girin...' style={styles.textInput}></TextInput>
                               <TouchableOpacity style={styles.button} onPress={() => {
                                               handleSubmit()
                                               setListName('')
-                                             dispatch(toggleNewListModalVisible(false))
+                                             dispatch(toggleNewTaskModalVisible(false))
                                              }}>
                                              <Text style={{color:'white',fontSize:20}}>Oluştur</Text>
                               </TouchableOpacity>
@@ -74,7 +68,7 @@ const NewListModal = () => {
   )
 }
 
-export default NewListModal
+export default NewTaskModal
 
 const styles = StyleSheet.create({
 

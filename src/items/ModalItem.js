@@ -2,13 +2,40 @@ import React, { useState } from 'react';
 import { SwipeListView } from 'react-native-swipe-list-view';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectTaskCounter, setTaskCounter } from '../slices/taskSlice';
 
 const ModalItem = ({ data }) => {
   const [completed, setCompleted] = useState(false);
+  const dispatch = useDispatch()
+  const [taskItem, setTaskItem] = useState([data]); // State'i tanımla ve başlangıçta data ile doldur
+const counter = useSelector(selectTaskCounter)
+  const handleDelete = async () => {
+    try {
+      // Silme işlemi
+      await fetch('http://localhost:3001/api/v1/task/delete/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          item_id: data.item_id,
+        }),
+      }).then(data => data.json()).then(data => console.log(data.message));;
+
+        dispatch(setTaskCounter(counter+1))
+
+    } catch (error) {
+      console.error('Error deleting list:', error);
+      // Hata durumunda kullanıcıya bilgilendirme yap
+    }
+  };
+
 
   const toggleCompleted = () => {
     setCompleted(!completed);
   };
+
 
   return (
     <SwipeListView
@@ -22,14 +49,18 @@ const ModalItem = ({ data }) => {
               style={[styles.itemContainer, completed && styles.completedItem]}
               onPress={toggleCompleted}
             >
-              <FontAwesome5Icon name="circle" size={17} />
-              <Text style={[styles.itemText, completed && styles.completedText]}>Textler</Text>
+              <FontAwesome5Icon name={completed ? "check" : "circle"}  color={completed ? 'green' : 'black'}  size={17} />
+              <Text style={[styles.itemText, completed && styles.completedText]}>{data.content}</Text>
             </TouchableOpacity>
           </View>
         );
       }}
       renderHiddenItem={() => (
-        <TouchableOpacity style={styles.deleteContainer}>
+        <TouchableOpacity
+        onPress={() => {
+          handleDelete()
+        }}
+        style={styles.deleteContainer}>
           <Text style={styles.deleteTextRight}>Sil</Text>
         </TouchableOpacity>
       )}
@@ -72,14 +103,17 @@ const styles = StyleSheet.create({
   deleteTextRight: {
     color: 'white',
     fontSize: 25,
+    textAlign:'center',
+    
   },
   deleteContainer: {
-    flex: 1,
     backgroundColor: 'red',
     width: 75,
     marginRight: 10,
+    height:75,
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems:'center',
+    paddingBottom:20,
     right: 0,
     position: 'absolute',
   },
