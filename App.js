@@ -1,19 +1,35 @@
 import { SafeAreaView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React from 'react'
+import { Provider, useDispatch } from 'react-redux'
+import { store } from './store'
+import { toggleListModalVisible } from './src/slices/modalSlice'
+import ListModal from './src/modals/ListModal'
+
+
+const AppWrapper = () => {
+  return (
+    <Provider store={store}> 
+      <App /> 
+    </Provider>
+  )
+}
 
 const App = () => {
+  const dispatch = useDispatch()
+
   return (
    <SafeAreaView style={styles.container}>
+    <ListModal></ListModal>
     <View style={styles.toDoContainer}>
     <Text style={styles.to}>Yapılacaklar</Text>
     <Text style={styles.do}>Listesi</Text>
     </View>
     <View style={styles.bottomContainer}>
-
- 
   <View style={styles.inputPlaceContainer}>
 <TextInput placeholderTextColor={'white'} placeholder='Kullanıcı Adınız' style={styles.userNameInput}></TextInput>
-<TouchableOpacity style={styles.button}>
+<TouchableOpacity 
+onPress={ () => dispatch(toggleListModalVisible(true)) }
+style={styles.button}>
   <Text style={styles.buttonText}>Giriş Yap</Text>
 </TouchableOpacity>
 </View>
@@ -28,8 +44,7 @@ const App = () => {
   )
 }
 
-export default App
-
+export default AppWrapper
 const styles = StyleSheet.create({
 
   container:{

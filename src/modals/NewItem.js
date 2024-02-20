@@ -1,15 +1,14 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 
-const LoginModal = () => {
+const NewItem = () => {
   return (
     <View>
-      <Text>LoginModal</Text>
-      <Text>LoginModal</Text>
+      <Text>NewItem</Text>
     </View>
   )
 }
 
-export default LoginModal
+export default NewItem
 
 const styles = StyleSheet.create({})
