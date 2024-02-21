@@ -1,6 +1,17 @@
+# Merhabalar Wibesoft Ekibi
+
+Uygulamamı tamamladım. Test senaryoları olarak farklı ekranlarda denemek, farklı internet hızlarında to-do'ları fetch etmek gereklidir.
+Benden istenilene göre React uygulaması da yapammı istemiştiniz;
+Projeye react yazarak başladım ancak react bilgimin yetersiz olduğunu, to-do gibi bir basit uygulama yapabileceğimi ancak sonrasında büyük projelerde şirketinize yardımcı olamayacağımı düşünerek sonlandırdım.
+Son 2 senedir sürekli react-native yazdığımdan react teknolojisinde köreldiğimi farkettim. Bu yüzden uygulamayı biraz daha geliştirerek backend ve mobil uygulamasını yazdım.
+Backend kodlarını da github adresimde bulabilirsiniz MVC mimarisi, Express.js gibi teknolojilerden yararlandım.
+React-native ile yazarken Redux, redux-toolkit gibi teknolojilerden faydalandım.
+Benden istenilen resimeler ve bir adet video Wibesoft klasörü altındadır.
+
+İyi günler, iyi çalışmalar dilerim.
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
