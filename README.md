@@ -1,7 +1,7 @@
 # Merhabalar Wibesoft Ekibi
 
 Uygulamamı tamamladım. Test senaryoları olarak farklı ekranlarda denemek, farklı internet hızlarında to-do'ları fetch etmek gereklidir.
-Benden istenilene göre React uygulaması da yapammı istemiştiniz;
+Benden istenilene göre React uygulaması da yapmamı istemiştiniz;
 Projeye react yazarak başladım ancak react bilgimin yetersiz olduğunu, to-do gibi bir basit uygulama yapabileceğimi ancak sonrasında büyük projelerde şirketinize yardımcı olamayacağımı düşünerek sonlandırdım.
 Son 2 senedir sürekli react-native yazdığımdan react teknolojisinde köreldiğimi farkettim. Bu yüzden uygulamayı biraz daha geliştirerek backend ve mobil uygulamasını yazdım.
 Backend kodlarını da github adresimde bulabilirsiniz MVC mimarisi, Express.js gibi teknolojilerden yararlandım.
