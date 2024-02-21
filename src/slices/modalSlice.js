@@ -6,11 +6,13 @@ isNewListModalVisible:false,
 isNewTaskModalVisible:false,
 isEditModalVisible:false
 };
+// Reducer fonksiyonlarının her biri, belirli bir modalın görünürlüğünü değiştirir
 
 export const modalSlice = createSlice({
   name: 'modals',
   initialState,
   reducers: {
+    // Liste modalının görünürlüğünü değiştirir
     toggleListModalVisible: (state, action) => {
       state.isListModalVisible = action.payload;
     },

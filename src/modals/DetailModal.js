@@ -14,6 +14,9 @@ const DetailModal = () => {
   const [taskData,setTaskData] = useState([])
   const taskId = useSelector(selectTaskId)
   const selectVisibilty = useSelector(selectNewTaskModal)
+  const selectVisibiltyDetail = useSelector(selectDetailModalVisible)
+
+  
   const taskCounter = useSelector(selectTaskCounter)
   const fetchData = async () => {
     try {
@@ -61,15 +64,22 @@ const DetailModal = () => {
   };
 
   useEffect(() => {
-
     fetchData()
-
+    dispatch(setTaskCounter(taskCounter+1))
   },[])
-  useEffect(() => {
 
+  useEffect(() => {
     fetchData()
 
-  },[selectVisibilty,taskCounter])
+  },[selectVisibilty])
+  useEffect(() => {
+    fetchData()
+
+  },[selectVisibiltyDetail])
+  useEffect(() => {
+    fetchData()
+
+  },[taskCounter])
   const selectModalVisible = useSelector(selectDetailModalVisible);
   const dispatch = useDispatch()
   const taskName = useSelector(selectTaskName)

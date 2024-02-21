@@ -8,7 +8,7 @@ import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import DetailModal from './DetailModal';
 import NewListModal from './NewListModal';
 import { selectUserId, selectUsername } from '../slices/userProfileSlice';
-import { selectTaskCounter } from '../slices/taskSlice';
+import { selectTaskCounter, setTaskCounter } from '../slices/taskSlice';
 
 
 
@@ -42,13 +42,18 @@ const ListModal = () => {
       // Kullanıcıya hata mesajı gösterebilirsiniz
     }
   };
-
   useEffect(() => {
     fetchData();
-  },[selectNewModalVisible,taskCounter]);
-  useEffect(() => {
-    fetchData();
+    dispatch(setTaskCounter(taskCounter+1))
   },[]);
+  useEffect(() => {
+    fetchData();
+  },[selectNewModalVisible]);
+  useEffect(() => {
+    fetchData();
+  },[taskCounter]);
+
+ 
 
   const itemList = ({ item }) => {
     return (

@@ -42,6 +42,7 @@ const App = () => {
       const data = await response.json();
       dispatch(setUsername(data.message[0].username))
       dispatch(setUserId(data.message[0].id))
+      dispatch(setTaskCounter(taskCounter+1))
     } catch (error) {
       console.error('Error fetching data:', error);
       // Kullanıcıya hata mesajı gösterilebilir

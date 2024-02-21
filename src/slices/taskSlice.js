@@ -11,6 +11,7 @@ export const taskSlice = createSlice({
   name:'task',
   initialState,
   reducers: {
+    //task ve liste ile ilgili bilgileri tutuyoruz.
     setTaskName: (state, action) => {
       state.taskName = action.payload;
     },

@@ -8,8 +8,9 @@ import { selectTaskCounter, setTaskCounter } from '../slices/taskSlice';
 const ModalItem = ({ data }) => {
   const [completed, setCompleted] = useState(false);
   const dispatch = useDispatch()
-  const [taskItem, setTaskItem] = useState([data]); // State'i tanımla ve başlangıçta data ile doldur
 const counter = useSelector(selectTaskCounter)
+
+
   const handleDelete = async () => {
     try {
       // Silme işlemi

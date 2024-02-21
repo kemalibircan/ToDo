@@ -9,6 +9,7 @@ export const userProfileSlice = createSlice({
   name:'userProfile',
   initialState,
   reducers: {
+    //user ile ilgili bilgileri tutuyoruz.
     setUsername: (state, action) => {
       state.username = action.payload;
     },
